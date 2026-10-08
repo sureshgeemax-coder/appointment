@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useApp } from '../contexts/AppContext';
 import AppointmentModal from './AppointmentModal';
 import { Toasts } from './UI';
+import sureshPhoto from '../../image/sureshkumar.jpg';
 
 const links = [
   ['/', 'Dashboard', LayoutDashboard], ['/calendar', 'Calendar', CalendarDays], ['/appointments', 'Appointments', Clock3],
@@ -28,7 +29,7 @@ export default function Shell() {
 
   return <div className="app-shell">
     <aside className={`sidebar ${navOpen ? 'open' : ''}`}>
-      <div className="brand"><span className="brand-mark"><CalendarDays /></span><div><strong>Suresh</strong><span>Appointment App</span></div><button className="icon-button mobile-close" onClick={() => setNavOpen(false)} aria-label="Close navigation"><X /></button></div>
+      <div className="brand"><span className="brand-mark"><img src={sureshPhoto} alt="Suresh Kumar" /></span><div><strong>Suresh</strong><span>Appointment App</span></div><button className="icon-button mobile-close" onClick={() => setNavOpen(false)} aria-label="Close navigation"><X /></button></div>
       <nav aria-label="Main navigation">{links.map(([to, label, Icon]) => <NavLink key={to} to={to} end={to === '/'}><Icon /><span>{label}</span>{label === 'Reminders' && upcomingCount > 0 && <b>{upcomingCount}</b>}</NavLink>)}</nav>
       <div className="sidebar-footer"><button onClick={logout}><LogOut /><span>Logout</span></button><p>Plan thoughtfully.<br />Meet meaningfully.</p></div>
     </aside>
@@ -40,7 +41,7 @@ export default function Shell() {
         <div className="top-actions">
           <button className="icon-button" onClick={() => saveSettings({ theme: settings.theme === 'dark' ? 'light' : 'dark' })} aria-label="Toggle color theme">{settings.theme === 'dark' ? <Sun /> : <Moon />}</button>
           <button className="icon-button notification-button" onClick={() => navigate('/reminders')} aria-label={`${upcomingCount} upcoming appointments`}><Bell />{upcomingCount > 0 && <span>{Math.min(upcomingCount, 9)}</span>}</button>
-          <div className="profile-wrap"><button className="profile-button" onClick={() => setProfileOpen(!profileOpen)}><span>{user?.name?.slice(0, 1).toUpperCase()}</span><div><strong>{user?.name}</strong><small>{user?.email}</small></div></button>{profileOpen && <div className="profile-menu"><button onClick={() => navigate('/settings')}><Settings /> Settings</button><button onClick={logout}><LogOut /> Logout</button></div>}</div>
+          <div className="profile-wrap"><button className="profile-button" onClick={() => setProfileOpen(!profileOpen)}><span><img src={sureshPhoto} alt="Suresh Kumar" /></span><div><strong>{user?.name}</strong><small>{user?.email}</small></div></button>{profileOpen && <div className="profile-menu"><button onClick={() => navigate('/settings')}><Settings /> Settings</button><button onClick={logout}><LogOut /> Logout</button></div>}</div>
         </div>
       </header>
       <div className="page-content"><Outlet /></div>

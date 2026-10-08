@@ -51,7 +51,7 @@ export default function AppointmentModal({ appointment, initialDate, onClose }) 
         <Field label="Meeting with"><input value={values.meetingWith} onChange={(e) => set('meetingWith', e.target.value)} placeholder="Full name" /></Field>
         <Field label="Company"><input value={values.company} onChange={(e) => set('company', e.target.value)} placeholder="Organization" /></Field>
         <Field label="Email" error={errors.email}><input type="email" value={values.email} onChange={(e) => set('email', e.target.value)} placeholder="name@company.com" /></Field>
-        <Field label="Mobile"><input type="tel" value={values.mobile} onChange={(e) => set('mobile', e.target.value)} placeholder="+91 98765 43210" /></Field>
+        <Field label="Mobile"><input type="tel" value={values.mobile} onChange={(e) => set('mobile', e.target.value)} placeholder="+65 9xxx xxxx" /></Field>
         <Field label="Location"><input value={values.location} onChange={(e) => set('location', e.target.value)} placeholder="Room, building or address" /></Field>
         <Field label="Meeting URL" error={errors.meetingUrl}><input type="url" value={values.meetingUrl} onChange={(e) => set('meetingUrl', e.target.value)} placeholder="https://meet.example.com/..." /></Field>
       </div></div>
