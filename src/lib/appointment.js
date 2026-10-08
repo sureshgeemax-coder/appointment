@@ -43,6 +43,11 @@ export function formatAppointmentTime(item) {
   return `${format(appointmentDate(item), 'h:mm a')} - ${format(new Date(`${item.date}T${item.endTime}:00`), 'h:mm a')}`;
 }
 
+export function formatDisplayDate(value) {
+  const date = typeof value === 'string' ? parseISO(value) : value;
+  return Number.isNaN(date?.getTime()) ? '' : format(date, 'dd/MMM/yyyy');
+}
+
 export function isToday(item) {
   return isSameDay(parseISO(item.date), new Date());
 }
@@ -58,7 +63,7 @@ export const typeClassName = (type = 'Other') => `type-${type.toLowerCase().repl
 export function appointmentDetails(item) {
   return [
     `Appointment: ${item.title}`,
-    `Date: ${item.date}`,
+    `Date: ${formatDisplayDate(item.date)}`,
     `Time: ${item.startTime} - ${item.endTime}`,
     item.meetingWith && `Meeting with: ${item.meetingWith}`,
     item.company && `Company: ${item.company}`,

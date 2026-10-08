@@ -36,7 +36,7 @@ export default function Shell() {
     <main className="main-shell">
       <header className="topbar">
         <button className="icon-button menu-toggle" onClick={() => setNavOpen(true)} aria-label="Open navigation"><Menu /></button>
-        <div className="live-date"><CalendarDays /><div><strong>{format(now, 'EEEE, MMMM d')}</strong><span>{format(now, 'h:mm a')} · Your schedule, at a glance</span></div></div>
+        <div className="live-date"><CalendarDays /><div><strong>{format(now, 'EEEE, dd/MMM/yyyy')}</strong><span>{format(now, 'h:mm a')} · Your schedule, at a glance</span></div></div>
         <div className="top-actions">
           <button className="icon-button" onClick={() => saveSettings({ theme: settings.theme === 'dark' ? 'light' : 'dark' })} aria-label="Toggle color theme">{settings.theme === 'dark' ? <Sun /> : <Moon />}</button>
           <button className="icon-button notification-button" onClick={() => navigate('/reminders')} aria-label={`${upcomingCount} upcoming appointments`}><Bell />{upcomingCount > 0 && <span>{Math.min(upcomingCount, 9)}</span>}</button>

@@ -1,7 +1,8 @@
 import { format } from 'date-fns';
+import { formatDisplayDate } from './appointment';
 
 const rowsFor = (appointments) => appointments.map((item) => ({
-  Date: item.date, Start: item.startTime, End: item.endTime, Title: item.title,
+  Date: formatDisplayDate(item.date), Start: item.startTime, End: item.endTime, Title: item.title,
   'Meeting with': item.meetingWith || '', Company: item.company || '', Type: item.type || '',
   Priority: item.priority || '', Status: item.status || '', Location: item.location || '',
 }));
@@ -43,7 +44,7 @@ export async function exportPdf(appointments) {
     doc.setFont(undefined, 'bold');
     doc.text(`${index + 1}. ${item.title}`, 14, y);
     doc.setFont(undefined, 'normal');
-    doc.text(`${item.date}  ${item.startTime}-${item.endTime}  |  ${item.type || 'Other'}  |  ${item.status || 'Scheduled'}`, 18, y + 6);
+    doc.text(`${formatDisplayDate(item.date)}  ${item.startTime}-${item.endTime}  |  ${item.type || 'Other'}  |  ${item.status || 'Scheduled'}`, 18, y + 6);
     y += 16;
   });
   doc.save(`appointments-${format(new Date(), 'yyyy-MM-dd')}.pdf`);

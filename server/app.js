@@ -58,6 +58,12 @@ function cleanString(value, field, maxLength, errors) {
   return cleaned;
 }
 
+function displayDate(value) {
+  const [year, month, day] = String(value || '').split('-');
+  const monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][Number(month) - 1];
+  return year && monthName && day ? `${day}/${monthName}/${year}` : value;
+}
+
 function validateAppointment(body, partial = false) {
   const result = {};
   const errors = [];
@@ -258,7 +264,7 @@ export function createApp(options = {}) {
     sheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
     sheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF0F766E' } };
     for (const item of appointments) {
-      sheet.addRow({ ...item, time: `${item.startTime || ''}${item.endTime ? ` - ${item.endTime}` : ''}` });
+      sheet.addRow({ ...item, date: displayDate(item.date), time: `${item.startTime || ''}${item.endTime ? ` - ${item.endTime}` : ''}` });
     }
     const buffer = await workbook.xlsx.writeBuffer();
     response

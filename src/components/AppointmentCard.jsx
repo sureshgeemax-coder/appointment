@@ -1,7 +1,7 @@
 import { CalendarDays, Check, Clock3, Copy, Edit3, ExternalLink, Mail, MapPin, MessageCircle, MoreHorizontal, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { format, parseISO } from 'date-fns';
-import { appointmentDetails, formatAppointmentTime, typeClassName } from '../lib/appointment';
+import { appointmentDetails, formatAppointmentTime, formatDisplayDate, typeClassName } from '../lib/appointment';
 
 export default function AppointmentCard({ appointment, onEdit, onDelete, onComplete, compact = false }) {
   const [open, setOpen] = useState(false);
@@ -17,7 +17,7 @@ export default function AppointmentCard({ appointment, onEdit, onDelete, onCompl
       <button onClick={copy}><Copy /> Copy details</button>
       <button className="danger-text" onClick={() => onDelete(appointment)}><Trash2 /> Delete</button>
     </div>}</div></div>
-      <div className="appointment-meta"><span><Clock3 />{formatAppointmentTime(appointment)}</span>{appointment.meetingWith && <span>with {appointment.meetingWith}{appointment.company && `, ${appointment.company}`}</span>}{appointment.location && <span><MapPin />{appointment.location}</span>}</div>
+      <div className="appointment-meta"><span><CalendarDays />{formatDisplayDate(appointment.date)}</span><span><Clock3 />{formatAppointmentTime(appointment)}</span>{appointment.meetingWith && <span>with {appointment.meetingWith}{appointment.company && `, ${appointment.company}`}</span>}{appointment.location && <span><MapPin />{appointment.location}</span>}</div>
       <div className="appointment-quick-actions">
         <a className="text-button" href={`mailto:${appointment.email || ''}?subject=${encodeURIComponent(appointment.title)}&body=${encodeURIComponent(details)}`}><Mail /> Send Email</a>
         <a className="text-button" href={whatsapp} target="_blank" rel="noreferrer"><MessageCircle /> WhatsApp</a>

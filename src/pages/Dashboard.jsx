@@ -4,6 +4,7 @@ import { endOfWeek, format, isAfter, isSameDay, isThisMonth, isWithinInterval, p
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useApp } from '../contexts/AppContext';
+import { formatDisplayDate } from '../lib/appointment';
 import AppointmentCard from '../components/AppointmentCard';
 import AppointmentModal from '../components/AppointmentModal';
 import { ConfirmDialog, EmptyState, LoadingState } from '../components/UI';
@@ -38,7 +39,7 @@ export default function Dashboard() {
       <button className="metric-card" onClick={() => navigate('/reports')}><span className="metric-icon teal"><CheckCircle2 /></span><div><small>Completed / Pending</small><strong>{completed} / {pending}</strong><p>appointment progress</p></div><TrendingUp /></button>
     </section>
     <div className="dashboard-columns"><section className="panel"><div className="panel-heading"><div><span className="eyebrow">Today</span><h2>Your agenda</h2></div><button className="text-button" onClick={() => navigate('/calendar')}>View calendar <ArrowRight /></button></div>{today.length ? <div className="card-list">{today.map((item) => <AppointmentCard key={item.id} appointment={item} compact onEdit={setEditing} onDelete={setDeleting} onComplete={(entry) => updateAppointment(entry.id, { status: 'completed' }, 'Marked complete')} />)}</div> : <EmptyState title="A clear day ahead" description="No appointments are scheduled today." action={<button className="button secondary" onClick={() => navigate('/add')}>Plan something</button>} />}</section>
-      <section className="panel focus-panel"><div className="panel-heading"><div><span className="eyebrow">Next up</span><h2>Upcoming</h2></div></div>{upcoming.length ? <div className="upcoming-list">{upcoming.map((item) => <button key={item.id} onClick={() => setEditing(item)}><span className={`priority-dot ${item.priority}`} /><div><strong>{item.title}</strong><small>{format(parseISO(item.date), 'EEE, MMM d')} · {item.startTime}{item.meetingWith && ` · ${item.meetingWith}`}</small></div><ArrowRight /></button>)}</div> : <EmptyState title="Nothing on the horizon" description="Your upcoming schedule is clear." />}</section></div>
+      <section className="panel focus-panel"><div className="panel-heading"><div><span className="eyebrow">Next up</span><h2>Upcoming</h2></div></div>{upcoming.length ? <div className="upcoming-list">{upcoming.map((item) => <button key={item.id} onClick={() => setEditing(item)}><span className={`priority-dot ${item.priority}`} /><div><strong>{item.title}</strong><small>{formatDisplayDate(item.date)} · {item.startTime}{item.meetingWith && ` · ${item.meetingWith}`}</small></div><ArrowRight /></button>)}</div> : <EmptyState title="Nothing on the horizon" description="Your upcoming schedule is clear." />}</section></div>
     {editing && <AppointmentModal appointment={editing} onClose={() => setEditing(null)} />}
     {deleting && <ConfirmDialog title="Delete appointment?" description={`“${deleting.title}” will be permanently removed.`} onCancel={() => setDeleting(null)} onConfirm={async () => { await deleteAppointment(deleting.id); setDeleting(null); }} />}
   </>;

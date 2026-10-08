@@ -42,7 +42,7 @@ export default function AppointmentModal({ appointment, initialDate, onClose }) 
     <form className="appointment-form" onSubmit={submit} noValidate>
       <div className="form-section"><h3><CalendarClock size={18} /> Schedule</h3><div className="form-grid">
         <Field label="Appointment title" error={errors.title} required className="span-2"><input value={values.title} onChange={(e) => set('title', e.target.value)} placeholder="e.g. Product strategy review" /></Field>
-        <Field label="Date" error={errors.date} required><input type="date" value={values.date} onChange={(e) => set('date', e.target.value)} /></Field>
+        <Field label="Date (DD/MMM/YYYY)" error={errors.date} required><input type="date" value={values.date} onChange={(e) => set('date', e.target.value)} /></Field>
         <div className="field-pair"><Field label="Starts" error={errors.startTime} required><input type="time" value={values.startTime} onChange={(e) => set('startTime', e.target.value)} /></Field><Field label="Ends" error={errors.endTime} required><input type="time" value={values.endTime} onChange={(e) => set('endTime', e.target.value)} /></Field></div>
         <Field label="Type"><select value={values.type} onChange={(e) => set('type', e.target.value)}>{TYPES.map((value) => <option key={value} value={value}>{value}</option>)}</select></Field>
         <div className="field-pair"><Field label="Priority"><select value={values.priority} onChange={(e) => set('priority', e.target.value)}>{PRIORITIES.map((value) => <option key={value}>{value}</option>)}</select></Field><Field label="Status"><select value={values.status} onChange={(e) => set('status', e.target.value)}>{STATUSES.map((value) => <option key={value}>{value}</option>)}</select></Field></div>

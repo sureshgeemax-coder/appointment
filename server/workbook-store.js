@@ -47,6 +47,11 @@ function rowToObject(sheet, row) {
 
 function serializeSpecialFields(appointment) {
   const result = { ...appointment };
+  const dateMatch = String(result.date || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (dateMatch) {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    result.date = `${dateMatch[3]}/${months[Number(dateMatch[2]) - 1]}/${dateMatch[1]}`;
+  }
   for (const field of ['recurring', 'reminder']) {
     if (result[field] !== undefined) result[field] = JSON.stringify(result[field]);
   }
@@ -55,6 +60,11 @@ function serializeSpecialFields(appointment) {
 
 function deserializeSpecialFields(appointment) {
   const result = { ...appointment };
+  const dateMatch = String(result.date || '').match(/^(\d{2})\/([A-Za-z]{3})\/(\d{4})$/);
+  if (dateMatch) {
+    const month = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'].indexOf(dateMatch[2].toLowerCase()) + 1;
+    if (month) result.date = `${dateMatch[3]}-${String(month).padStart(2, '0')}-${dateMatch[1]}`;
+  }
   for (const field of ['recurring', 'reminder']) {
     if (typeof result[field] !== 'string' || !result[field]) continue;
     try {

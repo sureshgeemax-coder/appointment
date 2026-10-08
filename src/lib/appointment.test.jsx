@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { matchesAppointment, validateAppointment } from './appointment';
+import { formatDisplayDate, matchesAppointment, validateAppointment } from './appointment';
 
 describe('appointment utilities', () => {
   it('validates required, chronological and contact fields', () => {
@@ -12,5 +12,9 @@ describe('appointment utilities', () => {
     expect(matchesAppointment(item, 'anita')).toBe(true);
     expect(matchesAppointment(item, 'board')).toBe(true);
     expect(matchesAppointment(item, 'holiday')).toBe(false);
+  });
+
+  it('formats displayed dates as DD/MMM/YYYY', () => {
+    expect(formatDisplayDate('2026-10-08')).toBe('08/Oct/2026');
   });
 });

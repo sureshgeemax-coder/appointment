@@ -9,14 +9,18 @@ export async function startServer(options = {}) {
   await app.locals.store.initialize();
   const port = options.port ?? Number(process.env.PORT || 3001);
   return new Promise((resolve, reject) => {
-    const server = app.listen(port, () => resolve(server));
+    const server = app.listen(port);
+    server.once('listening', () => resolve(server));
     server.once('error', reject);
   });
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   startServer()
-    .then((server) => console.log(`Appointment API listening on port ${server.address().port}`))
+    .then((server) => {
+      const address = server.address();
+      console.log(`Appointment API listening on port ${typeof address === 'object' && address ? address.port : process.env.PORT || 3001}`);
+    })
     .catch((error) => {
       console.error(error);
       process.exitCode = 1;

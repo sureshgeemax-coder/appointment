@@ -72,6 +72,9 @@ describe('appointment backend', () => {
     expect(created.status).toBe(201);
     expect(created.body).toMatchObject(input);
     expect(created.body.id).toEqual(expect.any(String));
+    const storedWorkbook = new ExcelJS.Workbook();
+    await storedWorkbook.xlsx.readFile(workbookPath);
+    expect(storedWorkbook.getWorksheet('Appointments').getRow(2).getCell(4).value).toBe('20/Oct/2026');
 
     const fetched = await request(app).get(`/api/appointments/${created.body.id}`).set(auth);
     expect(fetched.status).toBe(200);

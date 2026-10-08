@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import AppointmentModal from '../components/AppointmentModal';
 import { EmptyState, LoadingState, PageHeader } from '../components/UI';
-import { typeClassName } from '../lib/appointment';
+import { formatDisplayDate, typeClassName } from '../lib/appointment';
 
 const views = ['Month', 'Week', 'Day', 'Agenda'];
 
@@ -33,11 +33,11 @@ export default function CalendarPage() {
     const item = appointments.find((entry) => entry.id === id);
     const nextDate = format(date, 'yyyy-MM-dd');
     if (!item || item.date === nextDate) return;
-    try { await updateAppointment(id, { date: nextDate }, `Rescheduled to ${format(date, 'MMM d')}`); } catch (error) { toast(error.message, 'error'); }
+    try { await updateAppointment(id, { date: nextDate }, `Rescheduled to ${formatDisplayDate(date)}`); } catch (error) { toast(error.message, 'error'); }
   };
 
   return <><PageHeader eyebrow="Schedule" title="Calendar" description="Drag an appointment onto another day to reschedule it." actions={<button className="button primary" onClick={() => setAddingDate(format(cursor, 'yyyy-MM-dd'))}><Plus /> New appointment</button>} />
-    <section className="calendar-panel"><div className="calendar-toolbar"><div className="calendar-nav"><button className="icon-button" onClick={() => move(-1)} aria-label="Previous period"><ChevronLeft /></button><button className="button secondary small-button" onClick={() => setCursor(new Date())}>Today</button><button className="icon-button" onClick={() => move(1)} aria-label="Next period"><ChevronRight /></button><h2>{view === 'Month' ? format(cursor, 'MMMM yyyy') : view === 'Week' ? `${format(weekStart, 'MMM d')} - ${format(weekDays[6], 'MMM d, yyyy')}` : format(cursor, 'EEEE, MMMM d, yyyy')}</h2></div><div className="segmented">{views.map((item) => <button className={view === item ? 'active' : ''} onClick={() => setView(item)} key={item}>{item}</button>)}</div></div>
+    <section className="calendar-panel"><div className="calendar-toolbar"><div className="calendar-nav"><button className="icon-button" onClick={() => move(-1)} aria-label="Previous period"><ChevronLeft /></button><button className="button secondary small-button" onClick={() => setCursor(new Date())}>Today</button><button className="icon-button" onClick={() => move(1)} aria-label="Next period"><ChevronRight /></button><h2>{view === 'Month' ? format(cursor, 'MMMM yyyy') : view === 'Week' ? `${formatDisplayDate(weekStart)} - ${formatDisplayDate(weekDays[6])}` : `${format(cursor, 'EEEE')}, ${formatDisplayDate(cursor)}`}</h2></div><div className="segmented">{views.map((item) => <button className={view === item ? 'active' : ''} onClick={() => setView(item)} key={item}>{item}</button>)}</div></div>
       {view === 'Month' && <div className="month-calendar"><div className="weekday-row">{weekDays.map((day) => <span key={day}>{format(day, 'EEE')}</span>)}</div><div className="month-grid">{visibleDays.map((day) => { const key = format(day, 'yyyy-MM-dd'); return <div role="button" tabIndex="0" key={key} className={`calendar-day ${!isSameMonth(day, cursor) ? 'outside' : ''} ${isSameDay(day, new Date()) ? 'today' : ''}`} onClick={() => setAddingDate(key)} onDragOver={(e) => e.preventDefault()} onDrop={(e) => dropOn(e, day)}><span className="day-number">{format(day, 'd')}</span><div className="day-items">{(itemsByDate[key] || []).slice(0, 3).map((item) => <CalendarItem key={item.id} item={item} onEdit={setEditing} />)}{(itemsByDate[key] || []).length > 3 && <small>+{itemsByDate[key].length - 3} more</small>}</div></div>; })}</div></div>}
       {view === 'Week' && <div className="week-calendar">{weekDays.map((day) => { const key = format(day, 'yyyy-MM-dd'); return <div key={key} className={isSameDay(day, new Date()) ? 'today' : ''} onDragOver={(e) => e.preventDefault()} onDrop={(e) => dropOn(e, day)}><button className="week-heading" onClick={() => { setCursor(day); setView('Day'); }}><span>{format(day, 'EEE')}</span><strong>{format(day, 'd')}</strong></button><div className="week-items">{(itemsByDate[key] || []).map((item) => <CalendarItem key={item.id} item={item} onEdit={setEditing} />)}<button className="week-add" onClick={() => setAddingDate(key)}><Plus /> Add</button></div></div>; })}</div>}
       {view === 'Day' && <DayView date={cursor} items={itemsByDate[format(cursor, 'yyyy-MM-dd')] || []} onEdit={setEditing} onAdd={() => setAddingDate(format(cursor, 'yyyy-MM-dd'))} />}
