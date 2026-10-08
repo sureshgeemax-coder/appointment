@@ -4,3 +4,6 @@ data/*.xlsx
 data/*.tmp
 .env
 coverage/
+
+.vercel
+.env*
